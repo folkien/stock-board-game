@@ -49,8 +49,9 @@ plotsPath = 'scenarios/'
 outputExtension = '.svg'
 # Game settings
 gameDays = 20
-gameMaxPrice = 15
+gameMaxPrice = 12
 gameStocks = ['coffee', 'cars', 'wheat', 'computers', 'gold']
+gameStocksTickers = ['o', 's', 'D', 'v', 'P']
 
 # Arguments and config
 # #####################################################
@@ -97,6 +98,7 @@ plot1 = plt.subplot()
 # Plot all stocks
 for index in range(len(stocks)):
     plt.plot(time, stocks[index], label=gameStocks[index])
+    plt.plot(time, stocks[index], gameStocksTickers[index])
 
 plt.legend(loc='upper left')
 plt.grid()
