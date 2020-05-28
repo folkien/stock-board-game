@@ -8,6 +8,7 @@ import os
 import argparse
 import datetime
 import numpy
+import random
 from filelock import Timeout, FileLock
 from pandas_datareader import data
 from numpy import NaN
@@ -37,9 +38,7 @@ outputExtension = '.svg'
 # Game settings
 gameDays = 20
 gameMaxPrice = 15
-
-# Varaables
-# #####################################################
+gameStocks = ['coffee', 'cars', 'wheat', 'computers', 'gold']
 
 # Arguments and config
 # #####################################################
@@ -64,12 +63,27 @@ if (args.plotToFile):
 outputFilename = 'Scenario'+datetime.datetime.now().strftime('%y%V.%d%H%M')
 outputFilepath = plotsPath + outputFilename
 graphsCreated = []
+stocks = []
+time = range(1, gameDays+1)
+
+# Create stock data for all stocks
+for stockName in gameStocks:
+    data = []
+    for index in time:
+        data.append(random.choice(range(1, gameMaxPrice+1)))
+    stocks.append(data)
+    print(stockName)
+    print(data)
 
 
 # PLOTS
 # #####################################################
 fig = plt.figure(figsize=(16.0, 9.0))
 plot1 = plt.subplot()
+# Plot all stocks
+for index in range(len(stocks)):
+    plt.plot(time, stocks[index], label=gameStocks[index])
+
 plt.legend(loc='upper left')
 plt.grid()
 plt.xticks(numpy.arange(1, gameDays+1, step=1))
