@@ -32,6 +32,7 @@ def PlotSave(fig):
 
 def GetRandomPrice(old_price, minPrice, maxPrice, volatility=0.30):
     new_price = maxPrice+1
+    # While new price is invalid
     while (new_price > maxPrice) or (new_price < minPrice):
         rnd = random.random()
         change_percent = 2 * volatility * rnd
@@ -45,12 +46,13 @@ def GetRandomPrice(old_price, minPrice, maxPrice, volatility=0.30):
 # Const objects
 # #####################################################
 lockTimeout = 5 * 60
+variability = 0.30
 plotsPath = 'scenarios/'
 outputExtension = '.svg'
 # Game settings
 gameDays = 20
 gameMaxPrice = 12
-gameStocks = ['coffee', 'cars', 'wheat', 'computers', 'gold']
+gameStocks = ['crayons', 'cars', 'stone', 'wood', 'paper']
 gameStocksTickers = ['o', 's', 'D', 'v', 'P']
 
 # Arguments and config
@@ -58,8 +60,8 @@ gameStocksTickers = ['o', 's', 'D', 'v', 'P']
 parser = argparse.ArgumentParser()
 parser.add_argument('-n', '--stockCode', type=str,
                     required=True, help='Stock name code')
-parser.add_argument('-d', '--beginDate', type=str,
-                    required=False, help='Begin date')
+parser.add_argument('-x', '--variability', type=float,
+                    required=False, help='Variability')
 parser.add_argument('-g', '--plotToFile', action='store_true',
                     required=False, help='Plot to file')
 args = parser.parse_args()
@@ -69,6 +71,11 @@ args = parser.parse_args()
 if (args.plotToFile):
     import matplotlib
     matplotlib.use('Agg')
+
+# Set variaibility
+if (args.variability):
+    variability = args.variability
+print('Variability is %2.2f.' % (variability))
 
 
 # Dynamic variables
@@ -85,7 +92,7 @@ for stockName in gameStocks:
     price = random.choice(range(1, gameMaxPrice+1))
     for index in time:
         data.append(price)
-        price = GetRandomPrice(price, 1, gameMaxPrice)
+        price = GetRandomPrice(price, 1, gameMaxPrice, variability)
     stocks.append(data)
     print(stockName)
     print(data)
@@ -97,8 +104,11 @@ fig = plt.figure(figsize=(16.0, 9.0))
 plot1 = plt.subplot()
 # Plot all stocks
 for index in range(len(stocks)):
-    plt.plot(time, stocks[index], label=gameStocks[index])
-    plt.plot(time, stocks[index], gameStocksTickers[index])
+    plt.plot(time, stocks[index])
+    plt.plot(time, stocks[index],
+             gameStocksTickers[index], color='black', ms=8)
+    plt.plot(time, stocks[index],
+             gameStocksTickers[index], label=gameStocks[index])
 
 plt.legend(loc='upper left')
 plt.grid()
