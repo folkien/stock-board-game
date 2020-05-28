@@ -13,6 +13,8 @@ from filelock import Timeout, FileLock
 from pandas_datareader import data
 from numpy import NaN
 
+random.seed(datetime.datetime.now())
+
 # Create plot figures file
 
 
@@ -40,7 +42,9 @@ def GetRandomPrice(old_price, minPrice, maxPrice, volatility=0.30):
             change_percent -= (2 * volatility)
         change_amount = old_price * change_percent
         new_price = old_price + change_amount
-    return round(new_price)
+        if (new_price < 4):
+            new_price += 0.6
+    return new_price
 
 
 # Const objects
@@ -93,7 +97,7 @@ for stockName in gameStocks:
     for index in time:
         data.append(price)
         price = GetRandomPrice(price, 1, gameMaxPrice, variability)
-    stocks.append(data)
+    stocks.append(numpy.around(data))
     print(stockName)
     print(data)
 
