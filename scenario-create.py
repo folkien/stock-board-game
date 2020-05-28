@@ -32,7 +32,7 @@ def PlotSave(fig):
 # Const objects
 # #####################################################
 lockTimeout = 5 * 60
-plotsPath = 'plots/'
+plotsPath = 'scenarios/'
 outputExtension = '.svg'
 # Game settings
 gameDays = 20
@@ -61,7 +61,7 @@ if (args.plotToFile):
 
 # Dynamic variables
 # #####################################################
-outputFilename = 'Plot'
+outputFilename = 'Scenario'+datetime.datetime.now().strftime('%y%V.%d%H%M')
 outputFilepath = plotsPath + outputFilename
 graphsCreated = []
 
