@@ -30,6 +30,18 @@ def PlotSave(fig):
     print('Created plot %s.' % (filePath))
 
 
+def GetRandomPrice(old_price, minPrice, maxPrice, volatility=0.30):
+    new_price = maxPrice+1
+    while (new_price > maxPrice) or (new_price < minPrice):
+        rnd = random.random()
+        change_percent = 2 * volatility * rnd
+        if (change_percent > volatility):
+            change_percent -= (2 * volatility)
+        change_amount = old_price * change_percent
+        new_price = old_price + change_amount
+    return round(new_price)
+
+
 # Const objects
 # #####################################################
 lockTimeout = 5 * 60
@@ -69,8 +81,10 @@ time = range(1, gameDays+1)
 # Create stock data for all stocks
 for stockName in gameStocks:
     data = []
+    price = random.choice(range(1, gameMaxPrice+1))
     for index in time:
-        data.append(random.choice(range(1, gameMaxPrice+1)))
+        data.append(price)
+        price = GetRandomPrice(price, 1, gameMaxPrice)
     stocks.append(data)
     print(stockName)
     print(data)
