@@ -54,16 +54,18 @@ variability = 0.30
 plotsPath = 'scenarios/'
 outputExtension = '.svg'
 # Game settings
-gameDays = 20
-gameMaxPrice = 12
 gameStocks = ['crayons', 'cars', 'stone', 'wood', 'paper']
 gameStocksTickers = ['o', 's', 'D', 'v', 'P']
 
 # Arguments and config
 # #####################################################
 parser = argparse.ArgumentParser()
-parser.add_argument('-n', '--stockCode', type=str,
-                    required=True, help='Stock name code')
+parser.add_argument('-n', '--stocks', type=int, default=3,
+                    required=False, help='Number of stocks')
+parser.add_argument('-m', '--maxPrice', type=int, default=12,
+                    required=False, help='Max stock price')
+parser.add_argument('-d', '--days', type=int, default=10,
+                    required=False, help='Number of game days')
 parser.add_argument('-x', '--variability', type=float,
                     required=False, help='Variability')
 parser.add_argument('-g', '--plotToFile', action='store_true',
@@ -88,17 +90,17 @@ outputFilename = 'Scenario'+datetime.datetime.now().strftime('%y%V.%d%H%M')
 outputFilepath = plotsPath + outputFilename
 graphsCreated = []
 stocks = []
-time = range(1, gameDays+1)
+time = range(1, args.days+1)
 
 # Create stock data for all stocks
-for stockName in gameStocks:
+for i in range(args.stocks):
     data = []
-    price = random.choice(range(1, gameMaxPrice+1))
+    price = random.choice(range(1, args.maxPrice+1))
     for index in time:
         data.append(price)
-        price = GetRandomPrice(price, 1, gameMaxPrice, variability)
+        price = GetRandomPrice(price, 1, args.maxPrice, variability)
     stocks.append(numpy.around(data))
-    print(stockName)
+    print(gameStocks[i])
     print(data)
 
 
@@ -107,7 +109,7 @@ for stockName in gameStocks:
 fig = plt.figure(figsize=(16.0, 9.0))
 plot1 = plt.subplot()
 # Plot all stocks
-for index in range(len(stocks)):
+for index in range(args.stocks):
     plt.plot(time, stocks[index])
     plt.plot(time, stocks[index],
              gameStocksTickers[index], color='black', ms=8)
@@ -116,8 +118,8 @@ for index in range(len(stocks)):
 
 plt.legend(loc='upper left')
 plt.grid()
-plt.xticks(numpy.arange(1, gameDays+1, step=1))
-plt.yticks(numpy.arange(1, gameMaxPrice+1, step=1))
+plt.xticks(numpy.arange(1, args.days+1, step=1))
+plt.yticks(numpy.arange(1, args.maxPrice+1, step=1))
 # plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%m-%d'))
 # plt.gca().xaxis.set_minor_formatter(mdates.DateFormatter('%d'))
 # bollinger.PlotAbsDeviation()
