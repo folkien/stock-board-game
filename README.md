@@ -1,5 +1,5 @@
 # stock-board-game
-Stock board game
+Stock board game. Creates .png files with diffrent scenarios of value changing assets (`crayons`, `stones`, `balls`). You can play it yourself with kids, each game "day" make transactions and after that, reveal values of next day. And so on
 
 # Expert scenarios
 - 5 stocks,
